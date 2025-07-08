@@ -1,0 +1,1 @@
+`a simple music player inspired by spotify`
