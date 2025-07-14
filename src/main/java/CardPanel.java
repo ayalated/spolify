@@ -22,20 +22,4 @@ public class CardPanel extends JPanel {
         add(comp, key);
         cardMap.put(key, comp);
     }
-
-    // 切换显示卡片
-    public void showTab(String key) {
-        cardLayout.show(this, key);
-    }
-
-    // 可选：获取指定卡片组件
-    public JComponent getTab(String key) {
-        return cardMap.get(key);
-    }
-
-    // 可选：删除卡片
-    public void removeTab(String key) {
-        JComponent comp = cardMap.remove(key);
-        if (comp != null) remove(comp);
-    }
 }
