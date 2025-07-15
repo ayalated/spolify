@@ -1,3 +1,5 @@
+package com.spolify;
+
 import com.formdev.flatlaf.FlatLightLaf;
 
 public class MainActivity {

@@ -1,3 +1,5 @@
+package com.spolify;
+
 import javax.swing.*;
 import java.awt.*;
 

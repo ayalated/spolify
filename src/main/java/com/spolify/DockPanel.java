@@ -1,3 +1,5 @@
+package com.spolify;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -11,7 +13,7 @@ public class DockPanel extends JPanel {
 
         String[] tabs = {"主页","搜索","音乐库","创建"};
         String[] commands = {"tab1","tab2","tab3","tab4"};
-        String[] icons = {"icons8-home-48.png", "icons8-search-48.png", "icons8-library-48.png", "icons8-plus-48.png"};
+        String[] icons = {"/icons8-home-96.png", "/icons8-search-48.png", "/icons8-library-48.png", "/icons8-plus-48.png"};
 
         for (int i = 0; i < tabs.length; i++) {
             JButton btn = new JButton(tabs[i]);
@@ -33,7 +35,7 @@ public class DockPanel extends JPanel {
 
 
     public ImageIcon loadIcon(String path, int width, int height) {
-        ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource(path)));
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
         Image img = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
         return new ImageIcon(img);
     }

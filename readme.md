@@ -1,1 +1,1 @@
-`a simple music player inspired by spotify`
+`a simple Java GUI music player inspired by spotify`
