@@ -1,4 +1,4 @@
-package com.spolify;
+package com.spolify.ui;
 
 import javax.swing.*;
 import java.awt.*;

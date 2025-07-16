@@ -1,8 +1,9 @@
 package com.spolify;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.spolify.ui.SpolifyPlayer;
 
-public class MainActivity {
+public class Main {
     public static void main(String[] args) {
         FlatLightLaf.setup();
 

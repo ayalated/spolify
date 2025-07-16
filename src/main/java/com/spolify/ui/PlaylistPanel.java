@@ -1,4 +1,4 @@
-package com.spolify;
+package com.spolify.ui;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -8,8 +8,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PlayListPanel extends JPanel {
-    public PlayListPanel() {
+public class PlaylistPanel extends JPanel {
+    public PlaylistPanel() {
         setLayout(new BorderLayout());
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("我的音乐");
@@ -59,7 +59,7 @@ public class PlayListPanel extends JPanel {
                 if (selRow != -1 && e.getClickCount() == 2) { // 双击
                     DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
                     if (node.isLeaf()) {
-                        JOptionPane.showMessageDialog(PlayListPanel.this,
+                        JOptionPane.showMessageDialog(PlaylistPanel.this,
                                 "你点击了歌单：" + node.getUserObject().toString(),
                                 "提示", JOptionPane.INFORMATION_MESSAGE);
                     }
