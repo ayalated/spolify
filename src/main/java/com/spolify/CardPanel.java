@@ -16,7 +16,7 @@ public class CardPanel extends JPanel {
         addTab("tab1", new JLabel("主页内容", SwingConstants.CENTER));
         addTab("tab2", new JLabel("搜索内容", SwingConstants.CENTER));
         addTab("tab3", new PlayListPanel());
-        addTab("tab4", new JLabel("创建内容", SwingConstants.CENTER));
+       // addTab("tab4", new JLabel("创建内容", SwingConstants.CENTER));
     }
 
     // 添加卡片

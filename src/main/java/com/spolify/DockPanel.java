@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 // 底部dock： 主页，搜索，音乐库，创建
 
 public class DockPanel extends JPanel {
-    public DockPanel(ActionListener tabSwitchListener) {
+    public DockPanel(ActionListener tabSwitchListener,Runnable createPlaylistCallback) {
         setLayout(new GridLayout(1, 4));
 
         String[] tabs = {"主页","搜索","音乐库","创建"};
@@ -28,6 +28,11 @@ public class DockPanel extends JPanel {
             btn.putClientProperty("JButton.buttonType", "toolBarButton"); // 扁平化
             btn.setHorizontalTextPosition(SwingConstants.CENTER);
             btn.setVerticalTextPosition(SwingConstants.BOTTOM);
+
+            if (i == tabs.length - 1) {
+                btn.addActionListener(e->createPlaylistCallback.run());
+            }
+
             add(btn);
         }
     }

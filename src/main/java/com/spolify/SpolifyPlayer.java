@@ -22,7 +22,13 @@ public class SpolifyPlayer extends JFrame {
         add(cardPanel, BorderLayout.CENTER);
 
         // 2. 底部 dock 栏
-        DockPanel dock = new DockPanel(e -> switchTab(e.getActionCommand()));
+        DockPanel dock = new DockPanel(e -> switchTab(e.getActionCommand()),()->{
+            String name = JOptionPane.showInputDialog(this, "请输入新歌单名称：", "创建歌单", JOptionPane.PLAIN_MESSAGE);
+            if (name != null && !name.trim().isEmpty()) {
+                // 调用 PlaylistPanel 或 JTree 相关方法新增歌单节点
+//                playlistPanel.addPlaylist(name);
+            }
+        });
         add(dock, BorderLayout.SOUTH);
 
         setResizable(false);
