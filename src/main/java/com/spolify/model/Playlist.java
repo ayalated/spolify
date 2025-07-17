@@ -5,7 +5,7 @@ public class Playlist {
     private String code;
     private String name;
 
-    public Playlist(int id, String code, String name) {
+    public Playlist(String code, String name) {
         this.id = id;
         this.code = code;
         this.name = name;
