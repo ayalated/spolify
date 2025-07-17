@@ -1,5 +1,8 @@
 package com.spolify.ui;
 
+import com.spolify.db.PlaylistDB;
+import com.spolify.model.Playlist;
+
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -7,6 +10,7 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class PlaylistPanel extends JPanel {
     public PlaylistPanel() {
@@ -14,24 +18,13 @@ public class PlaylistPanel extends JPanel {
 
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("我的音乐");
 
-        // 歌单分组1
-        DefaultMutableTreeNode favGroup = new DefaultMutableTreeNode("收藏歌单");
-        favGroup.add(new DefaultMutableTreeNode("日语精选"));
-        favGroup.add(new DefaultMutableTreeNode("安静午后"));
+        PlaylistDB db = new PlaylistDB();
+        List<Playlist> lists = db.getAllPlaylists();
+        for (Playlist p : lists){
+            DefaultMutableTreeNode group = new DefaultMutableTreeNode(p.getName());
+            root.add(group);
+        }
 
-        // 歌单分组2
-        DefaultMutableTreeNode hisGroup = new DefaultMutableTreeNode("历史播放");
-        hisGroup.add(new DefaultMutableTreeNode("2024-经典老歌"));
-        hisGroup.add(new DefaultMutableTreeNode("2025-新碟上架"));
-
-        // 歌单分组3
-        DefaultMutableTreeNode selfGroup = new DefaultMutableTreeNode("自建歌单");
-        selfGroup.add(new DefaultMutableTreeNode("电子合成器"));
-        selfGroup.add(new DefaultMutableTreeNode("流行快节奏"));
-
-        root.add(favGroup);
-        root.add(hisGroup);
-        root.add(selfGroup);
 
         // 创建JTree
         JTree playlistTree = new JTree(root);
