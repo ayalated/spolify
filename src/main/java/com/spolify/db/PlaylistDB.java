@@ -72,14 +72,28 @@ public class PlaylistDB {
     // 获取所有歌单
     public List<Playlist> getAllPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
-        String sql = "SELECT code,name FROM playlists ORDER by id";
+        Playlist pinned = null;
+        String sql = "SELECT code,name FROM playlists ORDER by id DESC";
         try (Connection conn = DriverManager.getConnection(DB_URL); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                playlists.add(new Playlist(rs.getString("code"), rs.getString("name")));
+                String code = rs.getString("code");
+                String name = rs.getString("name");
+                Playlist p = new Playlist(code,name);
+
+                if ("已点赞的歌曲".equals(name)){
+                    pinned = p;
+                }else {
+                    playlists.add(p);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        if (pinned != null){
+            playlists.addFirst(pinned);
+        }
+
         return playlists;
     }
 

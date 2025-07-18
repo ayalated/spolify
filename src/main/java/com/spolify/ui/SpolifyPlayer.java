@@ -30,9 +30,8 @@ public class SpolifyPlayer extends JFrame {
             if (name != null && !name.trim().isEmpty()) {
                 PlaylistDB db = new PlaylistDB();
                 if (db.addPlaylist(name)) {
-                    // TODO 在这里刷新列表
-                    Playlist p = db.getByName(name);
-                    cardPanel.getPlaylistPanel().addPlaylistToTree(p);
+                    Playlist pl = db.getByName(name);
+                    cardPanel.getPlaylistPanel().addPlaylistToTree(pl);
                     JOptionPane.showMessageDialog(this, "创建成功！", "提示", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
