@@ -17,6 +17,7 @@ public class PlaylistPanel extends JPanel {
     private DefaultMutableTreeNode root;
     private JTree playlistTree;
     private DefaultTreeModel treeModel;
+    private DefaultMutableTreeNode currentNode;
 
     public PlaylistPanel() {
         setLayout(new BorderLayout());
@@ -58,6 +59,44 @@ public class PlaylistPanel extends JPanel {
         popupMenu.add(renameItem);
         popupMenu.add(deleteItem);
 
+        playItem.addActionListener(ev -> {
+            if (currentNode != null) {
+                Playlist p = (Playlist) currentNode.getUserObject();
+                JOptionPane.showMessageDialog(PlaylistPanel.this, "播放歌单：" + p.getName());
+            }
+        });
+
+        deleteItem.addActionListener(ev -> {
+            if (currentNode != null) {
+                Playlist p = (Playlist) currentNode.getUserObject();
+                if (!"已点赞的歌曲".equals(p.getName())) {
+                    int result = JOptionPane.showConfirmDialog(PlaylistPanel.this, "确定要删除" + p.getName() + "吗？", "确认", JOptionPane.YES_NO_OPTION);
+                    if (result == JOptionPane.YES_OPTION) {
+                        new PlaylistDB().deletePlaylist(p.getCode());
+                        root.remove(currentNode);
+                        treeModel.reload();
+                    }
+                }
+            }
+
+        });
+
+        renameItem.addActionListener(ev -> {
+            if (currentNode != null) {
+                Playlist p = (Playlist) currentNode.getUserObject();
+                if (!"已点赞的歌曲".equals(p.getName())) {
+                    String newName = JOptionPane.showInputDialog("重命名为：", p.getName());
+                    if (newName != null && !newName.trim().isEmpty()) {
+                        p.setName(newName);
+                        currentNode.setUserObject(p);
+                        treeModel.nodeChanged(currentNode);
+                        new PlaylistDB().renamePlaylist(p.getCode(), newName);
+                    }
+                }
+            }
+
+        });
+
         // 响应歌单节点点击
         playlistTree.addMouseListener(new MouseAdapter() {
             public void mouseReleased(MouseEvent e) {
@@ -66,41 +105,10 @@ public class PlaylistPanel extends JPanel {
                     if (path != null) {
                         playlistTree.setSelectionPath(path);
                         DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
-                        Object userObject = node.getUserObject();
 
-                        if (node.isLeaf()) {
+                        if (node.isLeaf() && node.getUserObject() instanceof Playlist) {
+                            currentNode = node;
                             popupMenu.show(playlistTree, e.getX(), e.getY());
-
-                            if (userObject instanceof Playlist p) {
-                                String code = p.getCode();
-                                String name = p.getName();
-                                playItem.addActionListener(ev -> {
-                                    JOptionPane.showMessageDialog(PlaylistPanel.this, "播放歌单：" + name);
-                                });
-
-                                if (!"已点赞的歌曲".equals(name)) {
-                                    renameItem.addActionListener(ev -> {
-                                        String newName = JOptionPane.showInputDialog("重命名为：", name);
-                                        if (newName != null && !newName.trim().isEmpty()) {
-                                            node.setUserObject(newName);
-                                            ((DefaultTreeModel) playlistTree.getModel()).nodeChanged(node);
-
-                                            PlaylistDB db = new PlaylistDB();
-                                            db.renamePlaylist(code, newName);
-                                        }
-                                    });
-
-                                    deleteItem.addActionListener(ev -> {
-                                        int result = JOptionPane.showConfirmDialog(PlaylistPanel.this, "确定要删除" + name + "吗？", "确认", JOptionPane.YES_NO_OPTION);
-                                        if (result == JOptionPane.YES_OPTION) {
-                                            PlaylistDB db = new PlaylistDB();
-                                            db.deletePlaylist(code);
-                                            ((DefaultMutableTreeNode) playlistTree.getModel().getRoot()).remove(node);
-                                            ((DefaultTreeModel) playlistTree.getModel()).reload();
-                                        }
-                                    });
-                                }
-                            }
                         }
                     }
                 }
