@@ -82,4 +82,24 @@ public class PlaylistDB {
         }
         return playlists;
     }
+
+    public Playlist getByName(String name) {
+        String sql = "SELECT code,name FROM playlists WHERE name = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String code = rs.getString("code");
+                return new Playlist(code, name);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // 没找到
+    }
+
 }

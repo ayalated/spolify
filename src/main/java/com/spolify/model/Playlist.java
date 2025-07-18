@@ -1,12 +1,10 @@
 package com.spolify.model;
 
 public class Playlist {
-    private int id;
     private String code;
     private String name;
 
     public Playlist(String code, String name) {
-        this.id = id;
         this.code = code;
         this.name = name;
     }

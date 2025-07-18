@@ -6,6 +6,7 @@ import com.spolify.model.Playlist;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -13,26 +14,29 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class PlaylistPanel extends JPanel {
+    private DefaultMutableTreeNode root;
+    private JTree playlistTree;
+    private DefaultTreeModel treeModel;
+
     public PlaylistPanel() {
         setLayout(new BorderLayout());
 
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("我的音乐");
+        root = new DefaultMutableTreeNode("我的音乐");
 
         PlaylistDB db = new PlaylistDB();
         List<Playlist> lists = db.getAllPlaylists();
-        for (Playlist p : lists){
+        for (Playlist p : lists) {
             DefaultMutableTreeNode group = new DefaultMutableTreeNode(p.getName());
             root.add(group);
         }
 
 
         // 创建JTree
-        JTree playlistTree = new JTree(root);
+        treeModel = new DefaultTreeModel(root);
+        playlistTree = new JTree(treeModel);
 
         // 设置只展开到一级
-        for (int i = 0; i < playlistTree.getRowCount(); i++) {
-            playlistTree.expandRow(1);
-        }
+        playlistTree.expandRow(0);
 
         playlistTree.setRootVisible(false);
 
@@ -40,8 +44,8 @@ public class PlaylistPanel extends JPanel {
         playlistTree.setFont(new Font("微软雅黑", Font.PLAIN, 15));
 
         DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) playlistTree.getCellRenderer();
-        renderer.setBackgroundNonSelectionColor(new Color(250,250,255));
-        renderer.setBackgroundSelectionColor(new Color(30,144,255,64));
+        renderer.setBackgroundNonSelectionColor(new Color(250, 250, 255));
+        renderer.setBackgroundSelectionColor(new Color(30, 144, 255, 64));
         renderer.setTextSelectionColor(Color.BLACK);
 
         // 响应歌单节点点击（例：打印被选中的歌单名）
@@ -65,5 +69,26 @@ public class PlaylistPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createBevelBorder(15));
 
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+
+    public void addPlaylistToTree(Playlist p) {
+        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(p.getName());
+        root.add(newNode);
+        treeModel.reload(root);
+        playlistTree.expandRow(0);
+    }
+
+    public void refreshTree() {
+        root.removeAllChildren();
+        PlaylistDB db = new PlaylistDB();
+        List<Playlist> lists = db.getAllPlaylists();
+
+        for (Playlist p : lists) {
+            root.add(new DefaultMutableTreeNode(p.getName()));
+        }
+
+        treeModel.reload();
+        playlistTree.expandRow(0);
     }
 }
