@@ -78,19 +78,19 @@ public class PlaylistDB {
             while (rs.next()) {
                 String code = rs.getString("code");
                 String name = rs.getString("name");
-                Playlist p = new Playlist(code,name);
+                Playlist p = new Playlist(code, name);
 
-                if ("已点赞的歌曲".equals(name)){
+                if ("已点赞的歌曲".equals(name)) {
                     pinned = p;
-                }else {
-                    playlists.add(p);
+                    continue;
                 }
+                playlists.add(p);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        if (pinned != null){
+        if (pinned != null) {
             playlists.addFirst(pinned);
         }
 
