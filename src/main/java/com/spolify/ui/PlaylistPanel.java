@@ -71,8 +71,6 @@ public class PlaylistPanel extends JPanel {
                         if (node.isLeaf()) {
                             popupMenu.show(playlistTree, e.getX(), e.getY());
 
-                            String playlistName = node.getUserObject().toString();
-
                             if (userObject instanceof Playlist p) {
                                 String code = p.getCode();
                                 String name = p.getName();
@@ -130,7 +128,8 @@ public class PlaylistPanel extends JPanel {
         List<Playlist> lists = db.getAllPlaylists();
 
         for (Playlist p : lists) {
-            root.add(new DefaultMutableTreeNode(p.getName()));
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(p);
+            root.add(node);
         }
 
         treeModel.reload();
