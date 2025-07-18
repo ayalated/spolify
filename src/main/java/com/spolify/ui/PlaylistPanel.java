@@ -12,12 +12,14 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Set;
 
 public class PlaylistPanel extends JPanel {
     private DefaultMutableTreeNode root;
     private JTree playlistTree;
     private DefaultTreeModel treeModel;
     private DefaultMutableTreeNode currentNode;
+    private static final Set<String> READONLY_PLAYLISTS = Set.of("已点赞的歌曲", "最近播放", "本地音乐");
 
     public PlaylistPanel() {
         setLayout(new BorderLayout());
@@ -69,7 +71,7 @@ public class PlaylistPanel extends JPanel {
         deleteItem.addActionListener(ev -> {
             if (currentNode != null) {
                 Playlist p = (Playlist) currentNode.getUserObject();
-                if (!"已点赞的歌曲".equals(p.getName())) {
+                if (!isReadonlyPlaylist(p)) {
                     int result = JOptionPane.showConfirmDialog(PlaylistPanel.this, "确定要删除" + p.getName() + "吗？", "确认", JOptionPane.YES_NO_OPTION);
                     if (result == JOptionPane.YES_OPTION) {
                         new PlaylistDB().deletePlaylist(p.getCode());
@@ -84,7 +86,7 @@ public class PlaylistPanel extends JPanel {
         renameItem.addActionListener(ev -> {
             if (currentNode != null) {
                 Playlist p = (Playlist) currentNode.getUserObject();
-                if (!"已点赞的歌曲".equals(p.getName())) {
+                if (!isReadonlyPlaylist(p)) {
                     String newName = JOptionPane.showInputDialog("重命名为：", p.getName());
                     if (newName != null && !newName.trim().isEmpty()) {
                         p.setName(newName);
@@ -124,7 +126,7 @@ public class PlaylistPanel extends JPanel {
 
 
     public void addPlaylistToTree(Playlist p) {
-        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(p.getName());
+        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(p);
         root.add(newNode);
         treeModel.reload(root);
         playlistTree.expandRow(0);
@@ -143,4 +145,9 @@ public class PlaylistPanel extends JPanel {
         treeModel.reload();
         playlistTree.expandRow(0);
     }
+
+    private boolean isReadonlyPlaylist(Playlist p) {
+        return READONLY_PLAYLISTS.contains(p.getName());
+    }
+
 }
